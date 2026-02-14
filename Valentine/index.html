@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>For My Valentine ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+<style>
+body{
+margin:0;
+font-family:Poppins,sans-serif;
+color:white;
+text-align:center;
+overflow-x:hidden;
+background:linear-gradient(-45deg,#ff4e8a,#ff7eb3,#ff758c,#ff4d6d);
+background-size:400% 400%;
+animation:bgmove 12s infinite;
+}
+@keyframes bgmove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.page{display:none;padding:30px;}
+.active{display:block;}
+
+.card{
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(12px);
+padding:25px;
+border-radius:20px;
+max-width:700px;
+margin:auto;
+}
+
+h1{
+font-family:"Dancing Script";
+font-size:40px;
+}
+
+input,textarea{
+width:85%;
+padding:12px;
+border-radius:15px;
+border:none;
+margin:10px;
+}
+
+button{
+padding:12px 25px;
+border:none;
+border-radius:30px;
+background:white;
+color:#ff4d6d;
+cursor:pointer;
+}
+button:hover{
+background:#ff4d6d;
+color:white;
+}
+
+.slideshow{
+display:flex;
+justify-content:center;
+gap:10px;
+}
+
+.slideshow img{
+width:200px;
+border-radius:12px;
+}
+
+.quote{
+font-style:italic;
+font-size:20px;
+margin:20px;
+}
+
+/* Fireworks */
+.fire{
+position:fixed;
+width:6px;
+height:6px;
+border-radius:50%;
+animation:explode 1s forwards;
+}
+@keyframes explode{
+to{
+transform:translate(var(--x),var(--y));
+opacity:0;
+}
+}
+
+@media(max-width:600px){
+h1{font-size:30px;}
+.slideshow img{width:120px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- MUSIC -->
+<audio id="bgMusic" autoplay loop muted>
+<source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- PAGE 1 -->
+<div id="page1" class="page active">
+<div class="card">
+<h1>Hey there 💌</h1>
+<p>What's your name?</p>
+<input id="nameInput">
+<br>
+<button onclick="checkName()">Continue</button>
+<p id="error"></p>
+</div>
+</div>
+
+<!-- PAGE 2 -->
+<div id="page2" class="page">
+<div class="card">
+<h1>Will you be my Valentine, Rrutu? ❤️</h1>
+
+<button onclick="yesAnswer()">Yes 💖</button>
+<button id="noBtn" onmouseover="moveNo()">No 😜</button>
+
+<p id="response"></p>
+
+<div id="dateOptions" style="display:none;">
+<button onclick="nextPage()">Movie 🎬</button>
+<button onclick="nextPage()">Coffee ☕</button>
+<button onclick="nextPage()">Walk 🌙</button>
+</div>
+</div>
+</div>
+
+<!-- PAGE 3 -->
+<div id="page3" class="page">
+<div class="card">
+<h1>A Letter for You 💌</h1>
+
+<textarea id="letterInput"
+placeholder="Hey Chimni you are not my valentine this year you are my valentine for all the years and days we spend together. 
+I Love you so much!"></textarea>
+
+<br>
+<button onclick="saveLetter()">Continue ❤️</button>
+</div>
+</div>
+
+<!-- FINAL PAGE -->
+<div id="page4" class="page">
+<div class="card">
+
+<h1>Our Memories 📸</h1>
+
+<div class="slideshow">
+<img id="s1" src="photo1.jpeg">
+<img id="s2" src="photo2.jpeg">
+<img id="s3" src="photo3.jpeg">
+</div>
+
+<div class="quote">
+"WITH THE BEST ONE OF MY LIFE" ❤️
+</div>
+
+<h2>My Letter To You</h2>
+<p id="finalLetter"></p>
+
+</div>
+</div>
+
+<script>
+
+/* enable music sound after first click */
+document.addEventListener("click",()=>{
+let m=document.getElementById("bgMusic");
+m.muted=false;
+m.volume=0.7;
+m.play();
+},{once:true});
+
+/* PAGE SWITCH */
+function showPage(id){
+document.querySelectorAll(".page")
+.forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+/* NAME CHECK */
+function checkName(){
+let name=document.getElementById("nameInput").value.trim();
+if(name.toLowerCase()=="rrutu"){
+showPage("page2");
+}else{
+error.innerText="Only Rrutu allowed 💫";
+}
+}
+
+/* YES BUTTON */
+function yesAnswer(){
+response.innerText="I knew it! 😍";
+dateOptions.style.display="block";
+}
+
+function moveNo(){
+noBtn.style.position="absolute";
+noBtn.style.left=Math.random()*80+"%";
+noBtn.style.top=Math.random()*60+"%";
+}
+
+function nextPage(){
+showPage("page3");
+}
+
+/* LETTER SAVE */
+function saveLetter(){
+let text=letterInput.value;
+showPage("page4");
+typeLetter(text);
+fireLoop=setInterval(startFireworks,700);
+}
+
+/* TYPING EFFECT */
+function typeLetter(text){
+finalLetter.innerHTML="";
+let i=0;
+function type(){
+if(i<text.length){
+finalLetter.innerHTML+=text[i++];
+setTimeout(type,40);
+}}
+type();
+}
+
+/* SLIDESHOW */
+let imgs=[
+"photo1.jpeg","photo2.jpeg","photo3.jpeg",
+"photo4.jpeg","photo5.jpeg","photo6.jpeg"
+];
+let idx=0;
+
+setInterval(()=>{
+idx=(idx+1)%imgs.length;
+s1.src=imgs[idx];
+s2.src=imgs[(idx+1)%imgs.length];
+s3.src=imgs[(idx+2)%imgs.length];
+},3000);
+
+/* FIREWORKS */
+function startFireworks(){
+for(let i=0;i<40;i++){
+let f=document.createElement("div");
+f.className="fire";
+f.style.left=Math.random()*100+"vw";
+f.style.top=Math.random()*100+"vh";
+f.style.background=
+`hsl(${Math.random()*360},100%,60%)`;
+f.style.setProperty('--x',(Math.random()*400-200)+"px");
+f.style.setProperty('--y',(Math.random()*400-200)+"px");
+document.body.appendChild(f);
+setTimeout(()=>f.remove(),1000);
+}
+}
+
+</script>
+
+</body>
+</html>
